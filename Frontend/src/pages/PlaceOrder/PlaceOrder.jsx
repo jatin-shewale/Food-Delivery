@@ -29,6 +29,11 @@ const PlaceOrder = () => {
   const placeOrder = async (event) => {
     event.preventDefault();
     try {
+      if (!token) {
+        alert("Please login to place an order");
+        return;
+      }
+
       let orderItems = [];
       food_list.forEach((item) => {
         if (cartItems[item._id] > 0) {
@@ -43,17 +48,30 @@ const PlaceOrder = () => {
         amount: getTotalCartAmount() + 2,
       };
   
-      const response = await axios.post(`${url}/api/order/place`, orderData, { headers: { token } });
+      const response = await axios.post(
+        `${url}/api/order/place`, 
+        orderData, 
+        { 
+          headers: { 
+            Authorization: `Bearer ${token.trim()}`,
+            'Content-Type': 'application/json'
+          } 
+        }
+      );
   
       if (response.data.success) {
         const { session_url } = response.data;
         window.location.href = session_url;
       } else {
-        alert("Failed to initiate payment. Try again later.");
+        alert(response.data.message || "Failed to initiate payment. Try again later.");
       }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("Something went wrong. Please try again.");
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 

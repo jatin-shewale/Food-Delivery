@@ -44,7 +44,7 @@ const Myorder = () => {
               <div key={index} className="my-orders-order">
                 <img src={assets.parcel_icon} alt="" />
                 <p>
-                  {order.items.map((item, index) => {
+                  {order.items && order.items.map((item, index) => {
                     if (index === order.items.length - 1) {
                       return item.name + " x " + item.quantity;
                     } else {
@@ -53,7 +53,7 @@ const Myorder = () => {
                   })}
                 </p>
                 <p>${order.amount}.00</p>
-                <p>Items: {order.items.length}</p>
+                <p>Items: {order.items ? order.items.length : 0}</p>
                 <p>
                   <span>&#x25cf;</span> <b>{order.status}</b>
                 </p>
