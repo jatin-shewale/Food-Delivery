@@ -8,7 +8,7 @@ import orderRouter from "./routes/orderRoute.js";
 
 //App Config
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 //Middleware
 app.use(express.json());
